@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const volunteerRoutes = require('./routes/volunteerRoutes');
@@ -14,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// API Routes
 app.use('/api/volunteers', volunteerRoutes);
 app.use('/api/admin', adminRoutes);
 
@@ -22,6 +23,17 @@ app.use('/api/admin', adminRoutes);
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Volunteer System API is running' });
 });
+
+// Serve frontend in production
+if (process.env.NODE_ENV === 'production') {
+  // Serve static files from the React build
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
+  
+  // Handle React routing, return all requests to React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+  });
+}
 
 // Connect to MongoDB and start server
 const PORT = process.env.PORT || 5000;

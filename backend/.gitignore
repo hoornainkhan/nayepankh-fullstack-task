@@ -1,0 +1,11 @@
+cd backend
+
+@"
+node_modules/
+.env
+uploads/
+logs/
+*.log
+"@ | Out-File -FilePath .gitignore -Encoding utf8
+
+cd ..

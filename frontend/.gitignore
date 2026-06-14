@@ -1,0 +1,13 @@
+# Check if it exists, if not create it
+cd frontend
+@"
+node_modules/
+build/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+"@ | Out-File -FilePath .gitignore -Encoding utf8
+
+cd ..
